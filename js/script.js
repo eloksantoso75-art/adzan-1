@@ -17,6 +17,7 @@ let config = { ...defaultConfig };
 let adzanAudio, doaAudio, backsoundAudio, klikAudio, successAudio, wrongAudio;
 let audioInitialized = false;
 let userInteracted = false;
+let backsoundEnabled = true; // Default state for backsound
 
 // Initialize audio elements after DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('touchstart', handleUserInteraction, { once: true });
     
     // Add click sound to all buttons (except audio control buttons to avoid double sound)
-    const buttons = document.querySelectorAll('button:not(#play-adzan):not(#play-doa)');
+    const buttons = document.querySelectorAll('button:not(#play-adzan):not(#play-doa):not(#backsound-toggle)');
     buttons.forEach(button => {
         button.addEventListener('click', function() {
             playClickSound();
@@ -60,11 +61,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize audio context
     initializeAudio();
+    
+    // Initialize backsound toggle
+    initializeBacksoundToggle();
 });
 
 function handleUserInteraction() {
     userInteracted = true;
     initializeAudio();
+    
+    // Start backsound if enabled after user interaction
+    if (backsoundEnabled) {
+        playBacksound();
+    }
 }
 
 function initializeAudio() {
@@ -93,6 +102,52 @@ function initializeAudio() {
     }
 }
 
+function initializeBacksoundToggle() {
+    // Check if there's a saved preference
+    const savedState = localStorage.getItem('backsoundEnabled');
+    if (savedState !== null) {
+        backsoundEnabled = savedState === 'true';
+    }
+    
+    // Update the toggle UI
+    updateBacksoundToggleUI();
+}
+
+function updateBacksoundToggleUI() {
+    const toggle = document.getElementById('backsound-toggle');
+    if (!toggle) return;
+    
+    const icon = document.getElementById('backsound-icon');
+    const text = document.getElementById('backsound-text');
+    
+    if (backsoundEnabled) {
+        icon.textContent = '🔊';
+        text.textContent = 'Backsound: ON';
+        toggle.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+    } else {
+        icon.textContent = '🔇';
+        text.textContent = 'Backsound: OFF';
+        toggle.style.background = 'linear-gradient(45deg, #9E9E9E, #757575)';
+    }
+}
+
+function toggleBacksound() {
+    backsoundEnabled = !backsoundEnabled;
+    
+    // Save the preference
+    localStorage.setItem('backsoundEnabled', backsoundEnabled.toString());
+    
+    // Update the UI
+    updateBacksoundToggleUI();
+    
+    // Play or stop backsound based on the new state
+    if (backsoundEnabled && userInteracted) {
+        playBacksound();
+    } else {
+        stopBacksound();
+    }
+}
+
 function playClickSound() {
     if (!userInteracted || !audioInitialized) return;
     
@@ -111,7 +166,7 @@ function playClickSound() {
 }
 
 function playBacksound() {
-    if (!userInteracted || !audioInitialized) return;
+    if (!userInteracted || !audioInitialized || !backsoundEnabled) return;
     
     try {
         const playPromise = backsoundAudio.play();
@@ -121,7 +176,9 @@ function playBacksound() {
                 console.log("Backsound play failed:", error);
                 // Try to play backsound on next user interaction
                 document.addEventListener('click', function playBacksoundOnInteraction() {
-                    backsoundAudio.play().catch(e => console.log("Backsound still failed:", e));
+                    if (backsoundEnabled) {
+                        backsoundAudio.play().catch(e => console.log("Backsound still failed:", e));
+                    }
                     document.removeEventListener('click', playBacksoundOnInteraction);
                 }, { once: true });
             });
