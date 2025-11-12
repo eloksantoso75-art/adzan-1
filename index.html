@@ -46,6 +46,13 @@
        Kompetisi
       </div></button>
     </div>
+    <!-- Backsound Toggle Button -->
+    <div style="text-align: center; margin-top: 30px;">
+     <button id="backsound-toggle" class="backsound-toggle" onclick="toggleBacksound()">
+      <span id="backsound-icon">🔊</span>
+      <span id="backsound-text">Backsound: ON</span>
+     </button>
+    </div>
    </div><!-- Halaman 2: Lafal Adzan -->
    <div id="page-lafal" class="page"><button class="back-button" onclick="showPage('home')">⬅️ Kembali</button>
     <div class="header">
@@ -66,6 +73,7 @@
        اَللهُ أَكْبَرُ اَللهُ أَكْبَرُ<br>
        لاَ إِلَهَ إِلاَّ اللهُ
      </div><button class="play-button" id="play-adzan" onclick="playAdzan()"> <span id="adzan-icon">▶️</span> <span id="adzan-text">Putar Suara Adzan</span> </button>
+     <p style="text-align: center; color: #666; margin-top: 15px; font-size: 16px;">💡 Tips: Klik tombol di atas untuk mendengarkan adzan</p>
     </div>
    </div><!-- Halaman 3: Doa Setelah Adzan -->
    <div id="page-doa" class="page"><button class="back-button" onclick="showPage('home')">⬅️ Kembali</button>
@@ -82,6 +90,7 @@
        وَابْعَثْهُ مَقَامًا مَحْمُوْدًا الَّذِيْ وَعَدْتَهُ<br>
        إِنَّكَ لاَ تُخْلِفُ الْمِيْعَادَ
      </div><button class="play-button" id="play-doa" onclick="playDoa()"> <span id="doa-icon">▶️</span> <span id="doa-text">Putar Doa</span> </button>
+     <p style="text-align: center; color: #666; margin-top: 15px; font-size: 16px;">💡 Tips: Klik tombol di atas untuk mendengarkan doa</p>
      <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; margin-top: 20px;">
       <h3 style="color: #2196F3; margin-top: 0;">📖 Artinya:</h3>
       <p style="font-size: 16px; line-height: 1.8; color: #555;">"Ya Allah, Tuhan pemilik seruan yang sempurna ini, dan shalat yang akan didirikan, berilah Muhammad wasilah dan keutamaan, dan bangkitkanlah dia pada tempat yang terpuji yang telah Engkau janjikan kepadanya. Sesungguhnya Engkau tidak menyalahi janji."</p>
@@ -164,13 +173,6 @@
     </div>
    </div>
   </div>
-  <!-- Audio Elements -->
-  <audio id="adzan-audio" src="assets/audio/adzan/adzan.mp3"></audio>
-  <audio id="doa-audio" src="assets/audio/doa/doa_setelah_adzan.mp3"></audio>
-  <audio id="backsound-audio" src="assets/audio/backsound/backsound.mp3" loop></audio>
-  <audio id="klik-audio" src="assets/audio/effects/klik.mp3"></audio>
-  <audio id="success-audio" src="assets/audio/effects/success.mp3"></audio>
-  <audio id="wrong-audio" src="assets/audio/effects/wrong.mp3"></audio>
   
   <script src="js/script.js"></script>
  </body>
