@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belajar Adzan Yuk!</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container"><!-- Halaman 1: Menu Utama -->
+   <div id="page-home" class="page active">
+    <div class="header">
+     <h1 id="main-title">🕌 Belajar Adzan Yuk! 🕌</h1>
+     <p style="font-size: 18px; color: #666; margin-top: 10px;">Aplikasi Pembelajaran Adzan untuk Anak</p>
+    </div>
+    <div class="mosque-decoration">
+     🕌 ⭐ 🌙
+    </div>
+    <div class="menu-grid"><button class="menu-button" onclick="showPage('lafal')">
+      <div class="icon">
+       📢
+      </div>
+      <div class="label" id="menu-lafal-text">
+       Lafal Adzan
+      </div></button> <button class="menu-button" onclick="showPage('doa')">
+      <div class="icon">
+       🤲
+      </div>
+      <div class="label" id="menu-doa-text">
+       Doa Setelah Adzan
+      </div></button> <button class="menu-button" onclick="showPage('materi')">
+      <div class="icon">
+       📚
+      </div>
+      <div class="label" id="menu-materi-text">
+       Materi Adzan
+      </div></button> <button class="menu-button" onclick="showPage('kompetisi')">
+      <div class="icon">
+       🏆
+      </div>
+      <div class="label" id="menu-kompetisi-text">
+       Kompetisi
+      </div></button>
+    </div>
+   </div><!-- Halaman 2: Lafal Adzan -->
+   <div id="page-lafal" class="page"><button class="back-button" onclick="showPage('home')">⬅️ Kembali</button>
+    <div class="header">
+     <h1>📢 Lafal Adzan</h1>
+    </div>
+    <div class="content-box">
+     <div class="arabic-text">
+      اَللهُ أَكْبَرُ اَللهُ أَكْبَرُ<br>
+       اَللهُ أَكْبَرُ اَللهُ أَكْبَرُ<br><br>
+       أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللهُ<br>
+       أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللهُ<br><br>
+       أَشْهَدُ أَنَّ مُحَمَّدًا رَسُوْلُ اللهِ<br>
+       أَشْهَدُ أَنَّ مُحَمَّدًا رَسُوْلُ اللهِ<br><br>
+       حَيَّ عَلَى الصَّلاَةِ<br>
+       حَيَّ عَلَى الصَّلاَةِ<br><br>
+       حَيَّ عَلَى الْفَلاَحِ<br>
+       حَيَّ عَلَى الْفَلاَحِ<br><br>
+       اَللهُ أَكْبَرُ اَللهُ أَكْبَرُ<br>
+       لاَ إِلَهَ إِلاَّ اللهُ
+     </div><button class="play-button" id="play-adzan" onclick="playAdzan()"> <span id="adzan-icon">▶️</span> <span id="adzan-text">Putar Suara Adzan</span> </button>
+    </div>
+   </div><!-- Halaman 3: Doa Setelah Adzan -->
+   <div id="page-doa" class="page"><button class="back-button" onclick="showPage('home')">⬅️ Kembali</button>
+    <div class="header">
+     <h1>🤲 Doa Setelah Adzan</h1>
+    </div>
+    <div class="content-box">
+     <div style="text-align: center; font-size: 60px; margin: 20px 0;">
+      👦🤲
+     </div>
+     <div class="arabic-text">
+      اَللّٰهُمَّ رَبَّ هٰذِهِ الدَّعْوَةِ التَّامَّةِ وَالصَّلاَةِ الْقَآئِمَةِ<br>
+       آتِ مُحَمَّدًا الْوَسِيْلَةَ وَالْفَضِيْلَةَ<br>
+       وَابْعَثْهُ مَقَامًا مَحْمُوْدًا الَّذِيْ وَعَدْتَهُ<br>
+       إِنَّكَ لاَ تُخْلِفُ الْمِيْعَادَ
+     </div><button class="play-button" id="play-doa" onclick="playDoa()"> <span id="doa-icon">▶️</span> <span id="doa-text">Putar Doa</span> </button>
+     <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; margin-top: 20px;">
+      <h3 style="color: #2196F3; margin-top: 0;">📖 Artinya:</h3>
+      <p style="font-size: 16px; line-height: 1.8; color: #555;">"Ya Allah, Tuhan pemilik seruan yang sempurna ini, dan shalat yang akan didirikan, berilah Muhammad wasilah dan keutamaan, dan bangkitkanlah dia pada tempat yang terpuji yang telah Engkau janjikan kepadanya. Sesungguhnya Engkau tidak menyalahi janji."</p>
+     </div>
+    </div>
+   </div><!-- Halaman 4: Materi Adzan -->
+   <div id="page-materi" class="page"><button class="back-button" onclick="showPage('home')">⬅️ Kembali</button>
+    <div class="header">
+     <h1>📚 Materi Adzan</h1>
+    </div>
+    <div class="content-box">
+     <div class="materi-section">
+      <h3>🕌 Pengertian Adzan</h3>
+      <p>Adzan adalah panggilan untuk mengajak umat Islam melaksanakan shalat fardhu. Adzan dikumandangkan oleh muadzin (orang yang mengumandangkan adzan) dari masjid untuk memberitahu waktu shalat telah tiba. Kata "adzan" berasal dari bahasa Arab yang artinya "pemberitahuan" atau "pengumuman".</p>
+     </div>
+     <div class="materi-section">
+      <h3>✅ Syarat-Syarat Adzan</h3>
+      <p><strong>1. Beragama Islam</strong> - Yang mengumandangkan adzan harus seorang muslim.<br><strong>2. Laki-laki</strong> - Adzan dikumandangkan oleh laki-laki.<br><strong>3. Berakal sehat</strong> - Muadzin harus dalam keadaan sadar dan berakal.<br><strong>4. Sudah masuk waktu shalat</strong> - Adzan dikumandangkan setelah waktu shalat tiba.<br><strong>5. Berurutan</strong> - Lafal adzan harus dibaca dengan urutan yang benar.</p>
+     </div>
+     <div class="materi-section">
+      <h3>⭐ Sunah-Sunah Adzan</h3>
+      <p><strong>1. Berdiri saat mengumandangkan adzan</strong><br><strong>2. Menghadap kiblat</strong><br><strong>3. Berwudhu</strong> - Dalam keadaan suci.<br><strong>4. Suara yang keras dan jelas</strong> - Agar banyak orang mendengar.<br><strong>5. Memasukkan jari ke telinga</strong> - Agar suara lebih keras.<br><strong>6. Menoleh ke kanan dan kiri</strong> - Saat mengucapkan "Hayya 'alash shalah" dan "Hayya 'alal falah".<br><strong>7. Memberi jeda</strong> - Antara kalimat adzan dengan tenang.</p>
+     </div>
+     <div class="materi-section">
+      <h3>🎯 Hikmah Adzan</h3>
+      <p><strong>1. Mengingatkan waktu shalat</strong> - Agar umat Islam tidak lupa shalat.<br><strong>2. Menyebarkan syiar Islam</strong> - Menunjukkan identitas sebagai muslim.<br><strong>3. Mengajak berbuat kebaikan</strong> - Mengajak untuk beribadah kepada Allah.<br><strong>4. Menjauhkan setan</strong> - Setan lari saat mendengar adzan.</p>
+     </div>
+    </div>
+   </div><!-- Halaman 5: Kompetisi -->
+   <div id="page-kompetisi" class="page"><button class="back-button" onclick="showPage('home')">⬅️ Kembali</button>
+    <div class="header">
+     <h1>🏆 Kompetisi Panjat Pinang</h1>
+     <p style="font-size: 16px; color: #666; margin-top: 10px;">Lomba Cepat Tepat Materi Adzan</p>
+    </div>
+    <div class="timer" id="timer">
+     Waktu: 00:00
+    </div>
+    <div class="winner-message" id="winner-message"></div>
+    <div class="game-container"><!-- Pemain 1 -->
+     <div class="player-section">
+      <div class="player-header">
+       <h3>👦 Pemain 1</h3>
+      </div>
+      <div class="score-display" id="score1">
+       0 / 20
+      </div>
+      <div class="tree-container">
+       <div class="climber" id="climber1">
+        🧗
+       </div>
+      </div>
+      <div class="question-box" id="question-box1">
+       <div class="question-text" id="question1">
+        Klik "Mulai Kompetisi" untuk memulai!
+       </div>
+       <div class="answer-buttons" id="answers1"></div>
+      </div>
+     </div><!-- Pemain 2 -->
+     <div class="player-section">
+      <div class="player-header">
+       <h3>👧 Pemain 2</h3>
+      </div>
+      <div class="score-display" id="score2">
+       0 / 20
+      </div>
+      <div class="tree-container">
+       <div class="climber" id="climber2">
+        🧗
+       </div>
+      </div>
+      <div class="question-box" id="question-box2">
+       <div class="question-text" id="question2">
+        Klik "Mulai Kompetisi" untuk memulai!
+       </div>
+       <div class="answer-buttons" id="answers2"></div>
+      </div>
+     </div>
+    </div>
+    <div class="game-controls"><button class="start-button" id="start-game" onclick="startGame()">🚀 Mulai Kompetisi</button>
+    </div>
+   </div>
+  </div>
+  <!-- Audio Elements -->
+  <audio id="adzan-audio" src="assets/audio/adzan/adzan.mp3"></audio>
+  <audio id="doa-audio" src="assets/audio/doa/doa_setelah_adzan.mp3"></audio>
+  <audio id="backsound-audio" src="assets/audio/backsound/backsound.mp3" loop></audio>
+  <audio id="klik-audio" src="assets/audio/effects/klik.mp3"></audio>
+  <audio id="success-audio" src="assets/audio/effects/success.mp3"></audio>
+  <audio id="wrong-audio" src="assets/audio/effects/wrong.mp3"></audio>
+  
+  <script src="js/script.js"></script>
+ </body>
+</html>
