@@ -14,48 +14,164 @@ const defaultConfig = {
 let config = { ...defaultConfig };
 
 // Audio elements
-const adzanAudio = document.getElementById('adzan-audio');
-const doaAudio = document.getElementById('doa-audio');
-const backsoundAudio = document.getElementById('backsound-audio');
-const klikAudio = document.getElementById('klik-audio');
-const successAudio = document.getElementById('success-audio');
-const wrongAudio = document.getElementById('wrong-audio');
+let adzanAudio, doaAudio, backsoundAudio, klikAudio, successAudio, wrongAudio;
+let audioInitialized = false;
+let userInteracted = false;
 
-// Play click sound on button clicks
+// Initialize audio elements after DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('button');
+    // Create audio elements
+    adzanAudio = new Audio();
+    doaAudio = new Audio();
+    backsoundAudio = new Audio();
+    klikAudio = new Audio();
+    successAudio = new Audio();
+    wrongAudio = new Audio();
+    
+    // Set audio sources
+    adzanAudio.src = 'assets/audio/adzan/adzan.mp3';
+    doaAudio.src = 'assets/audio/doa/doa_setelah_adzan.mp3';
+    backsoundAudio.src = 'assets/audio/backsound/backsound.mp3';
+    klikAudio.src = 'assets/audio/effects/klik.mp3';
+    successAudio.src = 'assets/audio/effects/success.mp3';
+    wrongAudio.src = 'assets/audio/effects/wrong.mp3';
+    
+    // Set backsound to loop
+    backsoundAudio.loop = true;
+    
+    // Set volume
+    backsoundAudio.volume = 0.3;
+    klikAudio.volume = 0.5;
+    successAudio.volume = 0.7;
+    wrongAudio.volume = 0.7;
+    
+    // Add event listeners for user interaction
+    document.addEventListener('click', handleUserInteraction, { once: true });
+    document.addEventListener('keydown', handleUserInteraction, { once: true });
+    document.addEventListener('touchstart', handleUserInteraction, { once: true });
+    
+    // Add click sound to all buttons (except audio control buttons to avoid double sound)
+    const buttons = document.querySelectorAll('button:not(#play-adzan):not(#play-doa)');
     buttons.forEach(button => {
         button.addEventListener('click', function() {
             playClickSound();
         });
     });
     
-    // Start backsound when page loads
-    playBacksound();
+    // Initialize audio context
+    initializeAudio();
 });
 
+function handleUserInteraction() {
+    userInteracted = true;
+    initializeAudio();
+}
+
+function initializeAudio() {
+    if (audioInitialized) return;
+    
+    try {
+        // Create audio context to enable audio
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+            const audioContext = new AudioContext();
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+        
+        // Try to load audio files
+        const audioFiles = [adzanAudio, doaAudio, backsoundAudio, klikAudio, successAudio, wrongAudio];
+        audioFiles.forEach(audio => {
+            audio.load();
+        });
+        
+        audioInitialized = true;
+        console.log("Audio initialized successfully");
+    } catch (error) {
+        console.error("Error initializing audio:", error);
+    }
+}
+
 function playClickSound() {
-    klikAudio.currentTime = 0;
-    klikAudio.play().catch(e => console.log("Error playing click sound:", e));
+    if (!userInteracted || !audioInitialized) return;
+    
+    try {
+        klikAudio.currentTime = 0;
+        const playPromise = klikAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Click sound play failed:", error);
+            });
+        }
+    } catch (error) {
+        console.log("Error playing click sound:", error);
+    }
 }
 
 function playBacksound() {
-    backsoundAudio.play().catch(e => console.log("Error playing backsound:", e));
+    if (!userInteracted || !audioInitialized) return;
+    
+    try {
+        const playPromise = backsoundAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Backsound play failed:", error);
+                // Try to play backsound on next user interaction
+                document.addEventListener('click', function playBacksoundOnInteraction() {
+                    backsoundAudio.play().catch(e => console.log("Backsound still failed:", e));
+                    document.removeEventListener('click', playBacksoundOnInteraction);
+                }, { once: true });
+            });
+        }
+    } catch (error) {
+        console.log("Error playing backsound:", error);
+    }
 }
 
 function stopBacksound() {
-    backsoundAudio.pause();
-    backsoundAudio.currentTime = 0;
+    try {
+        backsoundAudio.pause();
+        backsoundAudio.currentTime = 0;
+    } catch (error) {
+        console.log("Error stopping backsound:", error);
+    }
 }
 
 function playSuccessSound() {
-    successAudio.currentTime = 0;
-    successAudio.play().catch(e => console.log("Error playing success sound:", e));
+    if (!userInteracted || !audioInitialized) return;
+    
+    try {
+        successAudio.currentTime = 0;
+        const playPromise = successAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Success sound play failed:", error);
+            });
+        }
+    } catch (error) {
+        console.log("Error playing success sound:", error);
+    }
 }
 
 function playWrongSound() {
-    wrongAudio.currentTime = 0;
-    wrongAudio.play().catch(e => console.log("Error playing wrong sound:", e));
+    if (!userInteracted || !audioInitialized) return;
+    
+    try {
+        wrongAudio.currentTime = 0;
+        const playPromise = wrongAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Wrong sound play failed:", error);
+            });
+        }
+    } catch (error) {
+        console.log("Error playing wrong sound:", error);
+    }
 }
 
 // Navigation
@@ -69,19 +185,45 @@ function showPage(pageName) {
     }
 }
 
-// Audio functions
+// Audio functions with play/pause toggle
 function playAdzan() {
     const icon = document.getElementById('adzan-icon');
     const text = document.getElementById('adzan-text');
     const button = document.getElementById('play-adzan');
     
+    if (!userInteracted) {
+        alert("Silakan klik terlebih dahulu di mana saja untuk mengaktifkan audio");
+        return;
+    }
+    
     if (adzanAudio.paused) {
+        // Stop other audio first
+        if (!doaAudio.paused) {
+            doaAudio.pause();
+            doaAudio.currentTime = 0;
+            document.getElementById('doa-icon').textContent = '▶️';
+            document.getElementById('doa-text').textContent = 'Putar Doa';
+            document.getElementById('play-doa').disabled = false;
+        }
+        
         stopBacksound();
         adzanAudio.currentTime = 0;
-        adzanAudio.play().catch(e => console.log("Error playing adzan:", e));
-        icon.textContent = '⏸️';
-        text.textContent = 'Jeda Adzan';
-        button.disabled = true;
+        
+        const playPromise = adzanAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                icon.textContent = '⏸️';
+                text.textContent = 'Berhenti';
+                button.disabled = false;
+            }).catch(error => {
+                console.log("Adzan play failed:", error);
+                alert("Tidak dapat memutar audio adzan. Pastikan file audio ada dan browser mendukung format ini.");
+                icon.textContent = '▶️';
+                text.textContent = 'Putar Suara Adzan';
+                button.disabled = false;
+            });
+        }
         
         adzanAudio.onended = function() {
             icon.textContent = '▶️';
@@ -89,6 +231,13 @@ function playAdzan() {
             button.disabled = false;
             playBacksound();
         };
+    } else {
+        // Pause the audio
+        adzanAudio.pause();
+        icon.textContent = '▶️';
+        text.textContent = 'Putar Suara Adzan';
+        button.disabled = false;
+        playBacksound();
     }
 }
 
@@ -97,13 +246,39 @@ function playDoa() {
     const text = document.getElementById('doa-text');
     const button = document.getElementById('play-doa');
     
+    if (!userInteracted) {
+        alert("Silakan klik terlebih dahulu di mana saja untuk mengaktifkan audio");
+        return;
+    }
+    
     if (doaAudio.paused) {
+        // Stop other audio first
+        if (!adzanAudio.paused) {
+            adzanAudio.pause();
+            adzanAudio.currentTime = 0;
+            document.getElementById('adzan-icon').textContent = '▶️';
+            document.getElementById('adzan-text').textContent = 'Putar Suara Adzan';
+            document.getElementById('play-adzan').disabled = false;
+        }
+        
         stopBacksound();
         doaAudio.currentTime = 0;
-        doaAudio.play().catch(e => console.log("Error playing doa:", e));
-        icon.textContent = '⏸️';
-        text.textContent = 'Jeda Doa';
-        button.disabled = true;
+        
+        const playPromise = doaAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                icon.textContent = '⏸️';
+                text.textContent = 'Berhenti';
+                button.disabled = false;
+            }).catch(error => {
+                console.log("Doa play failed:", error);
+                alert("Tidak dapat memutar audio doa. Pastikan file audio ada dan browser mendukung format ini.");
+                icon.textContent = '▶️';
+                text.textContent = 'Putar Doa';
+                button.disabled = false;
+            });
+        }
         
         doaAudio.onended = function() {
             icon.textContent = '▶️';
@@ -111,6 +286,13 @@ function playDoa() {
             button.disabled = false;
             playBacksound();
         };
+    } else {
+        // Pause the audio
+        doaAudio.pause();
+        icon.textContent = '▶️';
+        text.textContent = 'Putar Doa';
+        button.disabled = false;
+        playBacksound();
     }
 }
 
